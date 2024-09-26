@@ -37,7 +37,7 @@ class TicketController extends Controller
             'desc' => 'required',
         ]);
 
-        Ticket::create([
+        $ticket = Ticket::create([
             'user_id' => auth()->id(),
             'sub' => $request->sub,
             'desc' => $request->desc,
@@ -45,7 +45,7 @@ class TicketController extends Controller
         ]);
 
         // Send email notification to admin (you need to configure mail)
-        Mail::to(auth()->user()->email)->send(new SendTicketMailOpen($request->sub, $request->desc));
+        Mail::to($ticket->user->email)->send(new SendTicketMailOpen($ticket));
 
         return redirect()->route('customer.index');
     }
